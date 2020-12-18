@@ -12,7 +12,7 @@ function initCards(card, index) {
     card.style.zIndex = allCards.length - index;
     card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(' + 30 * index + 'px)';
   });
-  
+
   tinderContainer.classList.add('loaded');
 }
 
@@ -29,8 +29,8 @@ allCards.forEach(function (el) {
     if (event.deltaX === 0) return;
     if (event.center.x === 0 && event.center.y === 0) return;
 
-    tinderContainer.classList.toggle('tinder_love', event.deltaX > 0);
-    tinderContainer.classList.toggle('tinder_nope', event.deltaX < 0);
+    //tinderContainer.classList.toggle('tinder_love', event.deltaX > 0);
+    //tinderContainer.classList.toggle('tinder_nope', event.deltaX < 0);
 
     var xMulti = event.deltaX * 0.03;
     var yMulti = event.deltaY / 80;
@@ -66,22 +66,19 @@ allCards.forEach(function (el) {
   });
 });
 
-function createButtonListener(love) {
+function createButtonLoveListener() {
   return function (event) {
     var cards = document.querySelectorAll('.tinder--card:not(.removed)');
     var moveOutWidth = document.body.clientWidth * 1.5;
+    //var moveOutHeight = document.body.clientHeight * 1.5;
 
     if (!cards.length) return false;
 
     var card = cards[0];
 
     card.classList.add('removed');
-
-    if (love) {
-      card.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
-    } else {
-      card.style.transform = 'translate(-' + moveOutWidth + 'px, -100px) rotate(30deg)';
-    }
+    card.style.transform = 'translate(' + moveOutWidth + 'px, -100px) rotate(-30deg)';
+    //card.style.transform = 'translateY(-' + moveOutHeight + 'px);'
 
     initCards();
 
@@ -89,8 +86,22 @@ function createButtonListener(love) {
   };
 }
 
-var nopeListener = createButtonListener(false);
-var loveListener = createButtonListener(true);
+function createButtonRemoveListener() {
+  return function (event) {
+    var removedCards = document.querySelectorAll('.tinder--card.removed')
 
-nope.addEventListener('click', nopeListener);
-love.addEventListener('click', loveListener);
+    if (!removedCards.length) return false;
+
+    var card = removedCards[removedCards.length - 1];
+
+    card.classList.remove('removed')
+
+    initCards();
+
+    event.preventDefault();
+  }
+}
+
+
+nope.addEventListener('click', createButtonRemoveListener());
+love.addEventListener('click', createButtonLoveListener());

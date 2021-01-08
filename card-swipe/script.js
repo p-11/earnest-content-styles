@@ -10,9 +10,10 @@ function initCards(card, index) {
 
   newCards.forEach(function (card, index) {
     card.style.zIndex = allCards.length - index;
-    card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY(' + 30 * index + 'px)';
+    card.style.transform = 'scale(' + (20 - index) / 20 + ') translateY('+ 30 * index + 'px)';
+    card.style.opacity = (10 - index) / 10;
   });
-
+  
   tinderContainer.classList.add('loaded');
 }
 
@@ -89,15 +90,15 @@ function createButtonLoveListener() {
 function createButtonRemoveListener() {
   return function (event) {
     var removedCards = document.querySelectorAll('.tinder--card.removed')
-
+    
     if (!removedCards.length) return false;
-
+    
     var card = removedCards[removedCards.length - 1];
-
+    
     card.classList.remove('removed')
-
+    
     initCards();
-
+    
     event.preventDefault();
   }
 }
